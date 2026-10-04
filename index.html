@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Fahrzeit — public transport times in Switzerland</title>
+  <meta name="description" content="Heatmap of public-transport travel time from an address in Switzerland. Starts at Pfingstweidstrasse 110, Zürich.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%231c1915' width='32' height='32' rx='6'/%3E%3Crect fill='%23ffd60a' x='5' y='5' width='7' height='7'/%3E%3Crect fill='%23ff6a00' x='13' y='5' width='6' height='7'/%3E%3Crect fill='%23e10600' x='20' y='5' width='7' height='7'/%3E%3Crect fill='%23ff8c00' x='5' y='13' width='7' height='6'/%3E%3Crect fill='%23b0006d' x='13' y='13' width='6' height='6'/%3E%3Crect fill='%235c1a9a' x='20' y='13' width='7' height='6'/%3E%3Crect fill='%23ff4d00' x='5' y='20' width='7' height='7'/%3E%3Crect fill='%236a0572' x='13' y='20' width='6' height='7'/%3E%3Crect fill='%232a0a4a' x='20' y='20' width='7' height='7'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link href="vendor/maplibre-gl.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <div id="map" role="application" aria-label="Map of public transport travel times in Switzerland"></div>
+
+  <aside id="panel">
+    <header class="mast">
+      <p class="kicker">Switzerland</p>
+      <h1>Fahrzeit</h1>
+      <p class="lede">How long public transport takes to reach each stop.</p>
+    </header>
+
+    <form id="query">
+      <div class="field">
+        <div class="label-row">
+          <label for="origin">From</label>
+          <span class="hint">Drag the pin to move it</span>
+        </div>
+        <input id="origin" name="origin" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-autocomplete="list" aria-controls="suggestions" aria-expanded="false">
+        <ul id="suggestions" class="suggest" role="listbox" hidden></ul>
+      </div>
+
+      <div class="field">
+        <div class="label-row">
+          <label for="when">Depart</label>
+          <span class="hint">Swiss time</span>
+        </div>
+        <div class="when-row">
+          <input id="when" name="when" type="datetime-local" required>
+          <button type="button" id="now">Now</button>
+        </div>
+      </div>
+
+      <fieldset>
+        <legend>Within</legend>
+        <div class="segment" id="horizon" role="radiogroup" aria-label="Maximum travel time">
+          <button type="button" role="radio" data-min="60" aria-checked="false">1 h</button>
+          <button type="button" role="radio" data-min="120" aria-checked="false">2 h</button>
+          <button type="button" role="radio" data-min="180" aria-checked="false">3 h</button>
+          <button type="button" role="radio" data-min="240" aria-checked="true">4 h</button>
+        </div>
+      </fieldset>
+
+      <button type="submit" id="go">Show times</button>
+    </form>
+
+    <div id="progress" hidden></div>
+    <p id="status" role="status"></p>
+
+    <div class="stat" id="stat" hidden>
+      <span id="stat-num">—</span>
+      <span id="stat-label">stops reached</span>
+    </div>
+
+    <p id="readout">Hover the map for the fastest stop in a cell.</p>
+
+    <div class="legend" aria-hidden="false">
+      <div class="legend-label">
+        <span>Travel time</span>
+        <span>shorter → longer</span>
+      </div>
+      <div class="legend-bar"></div>
+      <div class="legend-ticks">
+        <span>0</span>
+        <span>30</span>
+        <span>1 h</span>
+        <span>2 h</span>
+        <span>4 h</span>
+      </div>
+    </div>
+
+    <ol id="places"></ol>
+
+    <footer class="footnote">
+      <p>Times include the walk to the first vehicle and the wait to board. Scheduled timetable, not a live prediction.</p>
+      <p>Routing by <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a>. Places © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>. Map <a href="https://www.swisstopo.admin.ch/" target="_blank" rel="noopener">swisstopo</a>.</p>
+      <p><a href="https://github.com/lmaag182/fahrzeit" target="_blank" rel="noopener">Source and contact</a></p>
+    </footer>
+  </aside>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
